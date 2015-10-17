@@ -231,8 +231,20 @@ int main(void)
 		//LCD_DisplayStringLine(LINE(5),  (uint8_t *) str);
 		
 		resetTimer();
+		
+		/*the following while loop is where the main part of the code is
+		* it currently uses the userbutton on board since Mario forgot to bring along his
+		* jumper cables to test out the push button part
+		*/
+		
+		//if toggle = 0 lights are  blinking
+		//if toggle = 1 2 second wait
+		//if toggle = 2 LED toggle off, the lights stay on
+		
+		//@TODO add external push button to code
   while (1){ 
 			int num = TIM_GetCounter(TIM3);
+		//This is for the start of the procedure 
 		if(toggle==0){
 			if(num == 3000){
 					STM_EVAL_LEDOn(LED3);
@@ -244,7 +256,7 @@ int main(void)
 					resetTimer();
 			}
 		}
-			
+			//if the user button has been pressed and the lights are blinking
 			if (UBPressed==1 && toggle==0) {
 				STM_EVAL_LEDOff(LED3);
 				STM_EVAL_LEDOff(LED4);
@@ -252,27 +264,30 @@ int main(void)
 				PB_Config();
 				resetTimerLong();
 				toggle = 1;
-				rand = randomNumber();
+				rand = randomNumber();//generate a random number 
 			}
 
-			
+			//this is the to get the wait time for the reaction test.
 			if(toggle==1){
-					if(num == rand){
+					if(num == rand){ //if num is equal to the ramdom gened number turn on the LEDs and reset the timer
 							STM_EVAL_LEDOn(LED3);
 							STM_EVAL_LEDOn(LED4);
 							resetTimerLong();
 					}
 			}
-	
+			//this is the code for when the reaction timer has gone off
 			if (UBPressed==1 && toggle==1) {
+				//this block of code (from line 281 -284) writes to the LCD the lastest user reaction time. 
 				sprintf(str, "%d", num);
 				LCD_DisplayStringLine(LINE(1),  (uint8_t *) "          ");
 				LCD_DisplayStringLine(LINE(1),  (uint8_t *) str);
 				EE_ReadVariable(VirtAddVarTab[0], &VarDataTab[0]);
+				//this if statement determines wheter the user has beat their best reaction time
 				if(num < VarDataTab[0]){
 						VarValue = num;
 						EE_WriteVariable(VirtAddVarTab[0],VarValue);
 				}
+				/*the following block of code writes to the LCD the record reaction time*/
 				EE_ReadVariable(VirtAddVarTab[0], &VarDataTab[0]);
 				sprintf(str, "%d", VarDataTab[0]);
 				LCD_DisplayStringLine(LINE(3),  (uint8_t *) "          ");
@@ -280,9 +295,10 @@ int main(void)
 				UBPressed=0;
 				PB_Config();
 				resetTimerLong();
-				toggle = 2;
+				toggle = 2; 
 			}
-			
+			//the user needs to press the button to get the reaction time game going again. 
+			//to reset the reaction timer
 			if (UBPressed==1 && toggle==2) {
 				UBPressed=0;
 				PB_Config();

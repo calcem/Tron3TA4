@@ -1,7 +1,7 @@
 .\system_stm32f4xx.o: src\system_stm32f4xx.c
 .\system_stm32f4xx.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
 .\system_stm32f4xx.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cm4.h
-.\system_stm32f4xx.o: E:\Software\ARM\ARMCC\bin\..\include\stdint.h
+.\system_stm32f4xx.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 .\system_stm32f4xx.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cmInstr.h
 .\system_stm32f4xx.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cmFunc.h
 .\system_stm32f4xx.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cm4_simd.h
