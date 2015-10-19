@@ -2,7 +2,7 @@
 .\stm32f4xx_i2c.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_i2c.h
 .\stm32f4xx_i2c.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
 .\stm32f4xx_i2c.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cm4.h
-.\stm32f4xx_i2c.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\stm32f4xx_i2c.o: E:\Software\ARM\ARMCC\bin\..\include\stdint.h
 .\stm32f4xx_i2c.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cmInstr.h
 .\stm32f4xx_i2c.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cmFunc.h
 .\stm32f4xx_i2c.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cm4_simd.h
