@@ -52,6 +52,9 @@ TIM_OCInitTypeDef  TIM_OCInitStructure;
 __IO uint16_t CCR1_Val = 50000;
 uint16_t PrescalerValue = 0;
 __IO uint8_t UBPressed = 0;
+__IO uint8_t ExtButtonPressed = 0;
+
+
 
 int i;
 uint16_t line;
@@ -79,6 +82,8 @@ void LCD_DisplayInt(uint16_t LineNumber, uint16_t ColumnNumber, int Number);
 void LCD_DisplayFloat(uint16_t LineNumber, uint16_t ColumnNumber, float Number, int DigitAfterDecimalPoint);
 void RNG_Config(void);
 
+void externalButton(void);
+
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -99,14 +104,21 @@ int counter=1;
 int toggle = 0;
 
 int rand = 0;
-
+/*
+randomNumber(void) is a funtion that returns a random that 
+corresponds to a time period between 1 and 2 second 
+*/
 int randomNumber(void){
-		rand = RNG_GetRandomNumber()/120000;
+		rand = RNG_GetRandomNumber()/120000; //call to the random number generator/1200000 to get teh random number
+		//the following is a test to see if the number returned is between 6000 and 12000
+		//if not call randomNumber
+	
 		if(rand > 6000 && rand < 12000){
 			return rand;
 		}else{
 			randomNumber();
 		}
+		//the else clause is what causes for the delay. 
 }
 
 
@@ -242,6 +254,7 @@ int main(void)
 		//if toggle = 2 LED toggle off, the lights stay on
 		
 		//@TODO add external push button to code
+		externalButton();
   while (1){ 
 			int num = TIM_GetCounter(TIM3);
 		//This is for the start of the procedure 
@@ -277,8 +290,18 @@ int main(void)
 			}
 			//this is the code for when the reaction timer has gone off
 			if (UBPressed==1 && toggle==1) {
-				//this block of code (from line 281 -284) writes to the LCD the lastest user reaction time. 
+				 
+				//this if statement is to prevent cheating
+				//if the number = 0 it means that the user cheated as someone should not be able to get 0
+				if(num == 0){
+					ExtButtonPressed=0;
+					PB_Config();
+					externalButton();
+					resetTimer();
+					toggle = 0;
+				}else{
 				sprintf(str, "%d", num);
+				//this block of code writes to the LCD the lastest user reaction time.
 				LCD_DisplayStringLine(LINE(1),  (uint8_t *) "          ");
 				LCD_DisplayStringLine(LINE(1),  (uint8_t *) str);
 				EE_ReadVariable(VirtAddVarTab[0], &VarDataTab[0]);
@@ -297,11 +320,13 @@ int main(void)
 				resetTimerLong();
 				toggle = 2; 
 			}
+			}
 			//the user needs to press the button to get the reaction time game going again. 
 			//to reset the reaction timer
-			if (UBPressed==1 && toggle==2) {
-				UBPressed=0;
+			if (ExtButtonPressed==1) {
+				ExtButtonPressed=0;
 				PB_Config();
+				externalButton();
 				resetTimer();
 				toggle = 0;
 			}
@@ -441,6 +466,8 @@ void LCD_DisplayFloat(uint16_t LineNumber, uint16_t ColumnNumber, float Number, 
 		LCD_DisplayString(LineNumber, ColumnNumber, (uint8_t *) lcd_buffer);
 }
 
+
+
 void RNG_Config(void){
 	//Enable RNG controller clock
 	RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
@@ -456,6 +483,49 @@ void RNG_Config(void){
 }	
 
 
+//code to make the external button work
+void externalButton(void){
+	
+	//initialize the structures we will need
+	GPIO_InitTypeDef GPIO_InitStruct;
+	EXTI_InitTypeDef EXTI_InitStruct;
+	NVIC_InitTypeDef NVIC_InitStruct;
+	
+	//initialize the clocks
+	//not sure if they are already initialized somewhere
+	//better safe than sorry
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+	
+	//set the pin mode to in - as in its taking input
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	//using pin PC4 -- so Pin_4
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
+	
+	//set to GPIOC because PC4 -- next 2 lines
+	GPIO_Init(GPIOC, &GPIO_InitStruct);
+	//also set PinSource to 4
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource4);
+	
+	//once again line 4
+	EXTI_InitStruct.EXTI_Line = EXTI_Line4;
+	EXTI_InitStruct.EXTI_LineCmd = ENABLE;
+	EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
+	//could get away with EXTI_Trigger_Rising or EXTI_Trigger_Falling
+	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+	EXTI_Init(&EXTI_InitStruct);
+	
+	
+	NVIC_InitStruct.NVIC_IRQChannel = EXTI4_IRQn;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0x00;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0x00;
+	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStruct);
+	
+	EXTI_ClearITPendingBit(EXTI_Line4);
+}
 
 
 #ifdef  USE_FULL_ASSERT

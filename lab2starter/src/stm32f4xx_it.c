@@ -42,6 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 extern __IO uint8_t UBPressed;
+extern __IO uint8_t ExtButtonPressed;
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -185,6 +186,17 @@ void EXTI0_IRQHandler(void){
 }
 
 
+
+void EXTI4_IRQHandler(void){
+		/* add user-button handling code here */
+
+	/* don't execute the ISR until the button is released */
+//	while (STM_EVAL_PBGetState(BUTTON_USER) == Bit_SET);
+	
+	ExtButtonPressed = 1;
+	
+	EXTI_ClearITPendingBit(EXTI_Line4);
+}
 
 
 /******************************************************************************/

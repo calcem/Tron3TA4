@@ -2,7 +2,7 @@
 .\eeprom.o: .\inc\eeprom.h
 .\eeprom.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
 .\eeprom.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cm4.h
-.\eeprom.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\eeprom.o: E:\Software\ARM\ARMCC\bin\..\include\stdint.h
 .\eeprom.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cmInstr.h
 .\eeprom.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cmFunc.h
 .\eeprom.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cm4_simd.h

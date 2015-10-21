@@ -2,7 +2,7 @@
 .\misc.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\misc.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
 .\misc.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cm4.h
-.\misc.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\misc.o: E:\Software\ARM\ARMCC\bin\..\include\stdint.h
 .\misc.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cmInstr.h
 .\misc.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cmFunc.h
 .\misc.o: ..\STM32F429I-Discovery_FW_V1.0.1\Libraries\CMSIS\Include\core_cm4_simd.h
