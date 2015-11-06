@@ -25,7 +25,9 @@
 #include "stm32f4xx_it.h"
 #include "stm32f429i_discovery.h"
 #include "main.h"
-
+extern __IO uint8_t UBPressed;
+extern __IO uint8_t EB1Pressed;
+extern __IO uint8_t EB2Pressed;
 /**
   * @brief  Converts a 2 digit decimal to BCD format.
   * @param  Value: Byte to be converted.
@@ -158,6 +160,7 @@ void EXTI0_IRQHandler(void){
 	
 	//clear the pending bit otherwise the handler will fire continually
 	EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);
+	UBPressed = 1;
 	//this is configured to handle the push-button
 }
 
@@ -179,6 +182,29 @@ void EXTI1_IRQHandler(void){
 void EXTI3_IRQHandler(void){
 	//your code here
 	//don't forget to clear the pending bit
+	EB2Pressed = 1;
+	
+	EXTI_ClearITPendingBit(EXTI_Line3);
+}
+
+
+void EXTI4_IRQHandler(void){
+		/* add user-button handling code here */
+
+	/* don't execute the ISR until the button is released */
+//	while (STM_EVAL_PBGetState(BUTTON_USER) == Bit_SET);
+	
+	EB1Pressed = 1;
+	
+	EXTI_ClearITPendingBit(EXTI_Line4);
+}
+
+void EXTI5_IRQHandler(void){
+		/* add user-button handling code here */
+
+	/* don't execute the ISR until the button is released */
+//	while (STM_EVAL_PBGetState(BUTTON_USER) == Bit_SET);
+	
 }
 
 /*
